@@ -1,15 +1,11 @@
 import React from 'react';
 import { Carousel } from 'react-responsive-carousel';
-
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
-
-const images = [
-  "/dress1.jpg",
-  "/dress2.jpg",
-  "/dress3.jpg",
-  "/dress4.jpg",
-  "/dress5.jpg"
+const dummyHeroImages = [
+  { id: 1, image: "/hero1.jpg" },
+  { id: 2, image: "/hero2.jpg" },
+  { id: 3, image: "/dress1.jpg" },
 ];
 
 const collections = [
@@ -32,9 +28,9 @@ function Home() {
       {/* Hero Carousel */}
       <div className="w-full max-w-6xl mx-auto mt-6">
         <Carousel autoPlay infiniteLoop showThumbs={false}>
-          {images.map((src, idx) => (
-            <div key={idx}>
-              <img src={src} alt={`Dress ${idx + 1}`} />
+          {dummyHeroImages.map((hero, idx) => (
+            <div key={hero.id}>
+              <img src={hero.image} alt={`Hero ${idx + 1}`} className="object-cover h-[500px]" />
             </div>
           ))}
         </Carousel>
@@ -75,65 +71,53 @@ function Home() {
 
       {/* Instagram Follow Section */}
       <section className="bg-gray-100 py-10 relative overflow-hidden">
-  <h2 className="text-3xl font-bold text-center mb-6">Follow Us On Instagram</h2>
+        <h2 className="text-3xl font-bold text-center mb-6">Follow Us On Instagram</h2>
 
-  <style>
-    {`
-      @keyframes marqueeLeft {
-        0% { transform: translateX(100%); }
-        100% { transform: translateX(-100%); }
-      }
-      @keyframes marqueeRight {
-        0% { transform: translateX(-100%); }
-        100% { transform: translateX(100%); }
-      }
-    `}
-  </style>
+        <style>
+          {`
+            @keyframes marqueeLeft {
+              0% { transform: translateX(100%); }
+              100% { transform: translateX(-100%); }
+            }
+            @keyframes marqueeRight {
+              0% { transform: translateX(-100%); }
+              100% { transform: translateX(100%); }
+            }
+          `}
+        </style>
 
-  {/* First Row – Left to Right from collections */}
-  <div className="overflow-hidden">
-    <div
-      className="flex gap-4 w-max"
-      style={{
-        animation: 'marqueeLeft 30s linear infinite',
-      }}
-    >
-      {collections.concat(collections).map((item, i) => (
-        <img
-          key={i}
-          src={item.image}
-          alt={item.name}
-          className="w-40 h-40 rounded-lg object-cover"
-        />
-      ))}
-    </div>
-  </div>
+        {/* First Row */}
+        <div className="overflow-hidden">
+          <div className="flex gap-4 w-max" style={{ animation: 'marqueeLeft 30s linear infinite' }}>
+            {collections.concat(collections).map((item, i) => (
+              <img
+                key={i}
+                src={item.image}
+                alt={item.name}
+                className="w-40 h-40 rounded-lg object-cover"
+              />
+            ))}
+          </div>
+        </div>
 
-  {/* Second Row – Right to Left from bestSellers */}
-  <div className="overflow-hidden mt-4">
-    <div
-      className="flex gap-4 w-max"
-      style={{
-        animation: 'marqueeRight 30s linear infinite',
-      }}
-    >
-      {bestSellers.concat(bestSellers).map((item, i) => (
-        <img
-          key={i}
-          src={item.image}
-          alt={item.name}
-          className="w-40 h-40 rounded-lg object-cover"
-        />
-      ))}
-    </div>
-  </div>
-</section>
-
-
+        {/* Second Row */}
+        <div className="overflow-hidden mt-4">
+          <div className="flex gap-4 w-max" style={{ animation: 'marqueeRight 30s linear infinite' }}>
+            {bestSellers.concat(bestSellers).map((item, i) => (
+              <img
+                key={i}
+                src={item.image}
+                alt={item.name}
+                className="w-40 h-40 rounded-lg object-cover"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="bg-black text-white p-6 text-center space-y-2">
-        <p>&copy; 2025 Fashion Store. All rights reserved.</p>
+        <p>&copy; 2025 Nihonga. All rights reserved.</p>
         <div className="space-x-4">
           <a href="#" className="hover:underline">Cancellation Policy</a>
           <a href="#" className="hover:underline">Privacy Policy</a>
