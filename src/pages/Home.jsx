@@ -3,9 +3,9 @@ import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const dummyHeroImages = [
-  { id: 1, image: "/hero1.jpg" },
-  { id: 2, image: "/hero2.jpg" },
-  { id: 3, image: "/dress1.jpg" },
+  { id: 1, image: "/hero1.jpg", collection: "Summer Vibes" },
+  { id: 2, image: "/hero2.jpg", collection: "Elegant Nights" },
+  { id: 3, image: "/dress1.jpg", collection: "Chic Daily Wear" },
 ];
 
 const collections = [
@@ -26,15 +26,42 @@ function Home() {
   return (
     <div className="space-y-16">
       {/* Hero Carousel */}
-      <div className="w-full max-w-6xl mx-auto mt-6">
-        <Carousel autoPlay infiniteLoop showThumbs={false}>
-          {dummyHeroImages.map((hero, idx) => (
-            <div key={hero.id}>
-              <img src={hero.image} alt={`Hero ${idx + 1}`} className="object-cover h-[500px]" />
-            </div>
-          ))}
-        </Carousel>
+    {/* Hero Carousel */}
+<div className="w-full">
+  <Carousel
+    autoPlay
+    infiniteLoop
+    showThumbs={false}
+    showStatus={false}
+    interval={5000}
+    transitionTime={1000}
+    emulateTouch
+    stopOnHover={false}
+  >
+    {dummyHeroImages.map((hero, idx) => (
+      <div
+        key={hero.id}
+        className="relative overflow-hidden group"
+      >
+        <img
+          src={hero.image}
+          alt={`Hero ${idx + 1}`}
+          className="w-full h-[500px] object-cover transform scale-100 group-hover:scale-105 transition-transform duration-1000 ease-in-out"
+        />
+        {/* Overlay Text & Button */}
+        <div className="absolute top-6 left-4 md:top-1/2 md:left-10 md:transform md:-translate-y-1/2 text-left text-white bg-black bg-opacity-40 p-3 md:p-6 rounded-xl shadow-lg w-fit max-w-[90%]">
+          <h2 className="text-lg sm:text-xl md:text-3xl font-bold mb-2 md:mb-4">
+            {hero.collection}
+          </h2>
+          <button className="bg-white text-black text-xs sm:text-sm md:text-base px-3 py-1.5 md:px-4 md:py-2 rounded hover:bg-gray-200 transition">
+            Buy Now
+          </button>
+        </div>
       </div>
+    ))}
+  </Carousel>
+</div>
+
 
       {/* Our Collections */}
       <section className="max-w-6xl mx-auto text-center">
