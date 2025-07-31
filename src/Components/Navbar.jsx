@@ -146,14 +146,14 @@ function Navbar() {
               isMenuOpen ? 'translate-x-0' : '-translate-x-full'
             }`}
           >
-            <div className="flex justify-between items-center px-4 py-3 border-b">
+            <div className="flex bg-white justify-between items-center px-4 py-3 border-b">
               <span className="font-bold text-lg">Menu</span>
               <button onClick={() => setIsMenuOpen(false)}>
                 <X size={24} />
               </button>
             </div>
 
-            <nav className="flex flex-col p-4 space-y-4 text-gray-800 text-base font-medium">
+            <nav className="flex flex-col p-4 space-y-4 text-gray-800 text-base font-medium bg-white h-screen">
               <NavLink to="/" onClick={() => setIsMenuOpen(false)}>Home</NavLink>
 
               {/* Shop Collapsible */}
