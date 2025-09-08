@@ -2,11 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
-const products = [
-  { id: 1, name: "T-shirt", price: "$20", image: "/party_wear.jpg" },
-  { id: 2, name: "Jeans", price: "$40", image: "/ethnic.jpg" },
-  { id: 3, name: "Sneakers", price: "$60", image: "/denim_jacket.jpg" },
-];
+
 
 function Shop() {
   return (

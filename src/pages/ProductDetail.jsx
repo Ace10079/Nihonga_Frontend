@@ -1,96 +1,148 @@
-import React, { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-
-const products = [
-  {
-    id: 1,
-    name: "T-shirt",
-    price: "$20",
-    image: "/casual_tee.jpg",
-    description:
-      "This premium cotton T-shirt offers all-day comfort and a clean look. Designed for daily wear, it's breathable and durable. A must-have staple in every wardrobe."
-  },
-  {
-    id: 2,
-    name: "Jeans",
-    price: "$40",
-    image: "/casual_fit.webp",
-    description:
-      "Our classic blue denim jeans are perfect for any occasion. With a snug fit and stylish cut, they’ll become your go-to pants in no time."
-  },
-  {
-    id: 3,
-    name: "Sneakers",
-    price: "$60",
-    image: "/products/sneakers.jpg",
-    description:
-      "Walk the streets in comfort with our lightweight sneakers. Featuring a flexible sole and breathable design — where fashion meets function."
-  },
-];
+// src/pages/ProductDetail.jsx
+import React, { useEffect, useState } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { productAPI, cartAPI, BASE_URL } from "../API"; // <-- import BASE_URL
 
 function ProductDetail() {
   const { id } = useParams();
-  const [selectedSize, setSelectedSize] = useState("M");
+  const navigate = useNavigate();
+  const [product, setProduct] = useState(null);
+  const [selectedSize, setSelectedSize] = useState("");
+  const [mainImage, setMainImage] = useState("");
+  const [addingToCart, setAddingToCart] = useState(false);
 
-  const product = products.find((p) => p.id === parseInt(id));
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await productAPI.getById(id);
+        setProduct(data);
+        setSelectedSize(data.sizes?.[0] || "");
+        setMainImage(`${BASE_URL}${data.heroImage}`);
+      } catch (error) {
+        console.error("Error fetching product:", error);
+      }
+    })();
+  }, [id]);
 
-  if (!product) {
-    return <h2 className="text-center text-red-500 text-xl mt-10">Product not found</h2>;
-  }
+  if (!product) return <h2 className="text-center mt-10">Loading...</h2>;
 
-  const sizes = ["S", "M", "L", "XL"];
+  const stockStatus =
+    product.stock === 0 ? "Out of Stock"
+      : product.stock <= product.lowStockThreshold ? "Low Stock" : "In Stock";
+
+  const handleAddToCart = async () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      alert("Please log in to add items to your cart.");
+      return;
+    }
+    if (!selectedSize && product.sizes?.length) {
+      alert("Please select a size.");
+      return;
+    }
+
+    setAddingToCart(true);
+    try {
+      await cartAPI.add({
+        userId: user._id,
+        productId: product._id,
+        size: selectedSize || "",
+        quantity: 1,
+      });
+      navigate("/cart");
+    } catch (e) {
+      alert("Failed to add item to cart");
+    } finally {
+      setAddingToCart(false);
+    }
+  };
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-10">
-      <Link to="/shop" className="text-blue-600 underline mb-6 inline-block">← Back to Shop</Link>
+    <div className="max-w-6xl mx-auto px-6 py-10">
+      <Link
+        to={`/collections/${product.collection}`}
+        className="text-blue-600 underline mb-6 inline-block"
+      >
+        ← Back to Collection
+      </Link>
 
-      {/* Product Image */}
-      <div className="flex justify-center mb-8">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full max-w-md rounded-2xl shadow-lg transition-transform duration-300 hover:scale-105"
-        />
-      </div>
-
-      {/* Name and Price */}
-      <div className="text-center mb-4">
-        <h1 className="text-3xl font-bold">{product.name}</h1>
-        <p className="text-xl text-gray-700 mt-1">{product.price}</p>
-      </div>
-
-      {/* Description */}
-      <p className="text-gray-600 text-md leading-relaxed text-center max-w-2xl mx-auto mb-8">
-        {product.description}
-      </p>
-
-      {/* Size Options */}
-      <div className="text-center mb-10">
-        <h3 className="text-lg font-medium mb-4">Select Size</h3>
-        <div className="flex justify-center gap-4 flex-wrap">
-          {sizes.map((size) => (
-            <button
-              key={size}
-              onClick={() => setSelectedSize(size)}
-              className={`px-5 py-2 rounded-full border transition-all duration-300 ${
-                selectedSize === size
-                  ? "bg-blue-600 text-white border-blue-600 shadow-md scale-105"
-                  : "border-gray-300 text-gray-700 hover:border-blue-500 hover:text-blue-600"
-              }`}
-            >
-              {size}
-            </button>
-          ))}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        {/* Left: Gallery */}
+        <div>
+          <img
+            src={mainImage}
+            alt={product.name}
+            className="w-full rounded-2xl shadow-lg mb-4 transition-transform duration-300 hover:scale-105"
+          />
+          {product.showcaseImages?.length > 0 && (
+            <div className="flex gap-3 mt-2">
+              {[product.heroImage, ...product.showcaseImages].map((img, i) => {
+                const url = `${BASE_URL}${img}`;
+                const active = mainImage === url;
+                return (
+                  <img
+                    key={i}
+                    src={url}
+                    alt={`Preview ${i + 1}`}
+                    onClick={() => setMainImage(url)}
+                    className={`w-20 h-20 object-cover rounded-md cursor-pointer border-2 transition ${active ? "border-blue-600" : "border-transparent"}`}
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
-      </div>
 
-      {/* Add to Cart Button */}
-      <div className="text-center">
-        <button
-          className="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-8 py-3 rounded-full text-lg font-medium shadow-lg transition-transform duration-300 hover:scale-105"
-        >
-          Add to Cart
-        </button>
+        {/* Right: Info */}
+        <div>
+          <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
+          <p className="text-xl font-semibold text-green-600 mb-2">₹{product.price}</p>
+          <p
+            className={`mb-4 font-medium ${
+              stockStatus === "Out of Stock"
+                ? "text-red-500"
+                : stockStatus === "Low Stock"
+                ? "text-yellow-600"
+                : "text-green-600"
+            }`}
+          >
+            {stockStatus}
+          </p>
+
+          <p className="text-gray-700 mb-6">{product.description}</p>
+
+          {/* Size Selector */}
+          {product.sizes?.length > 0 && (
+            <div className="mb-6">
+              <h3 className="text-lg font-medium mb-3">Select Size</h3>
+              <div className="flex gap-3 flex-wrap">
+                {product.sizes.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`px-5 py-2 rounded-full border transition-all duration-300 ${
+                      selectedSize === size
+                        ? "bg-blue-600 text-white border-blue-600 shadow-md scale-105"
+                        : "border-gray-300 text-gray-700 hover:border-blue-500 hover:text-blue-600"
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <button
+            onClick={handleAddToCart}
+            disabled={
+              (product.sizes?.length && !selectedSize) || product.stock === 0 || addingToCart
+            }
+            className="w-full lg:w-auto bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-8 py-3 rounded-full text-lg font-medium shadow-lg transition-transform duration-300 hover:scale-105 disabled:opacity-50"
+          >
+            {addingToCart ? "Adding..." : "Add to Cart"}
+          </button>
+        </div>
       </div>
     </div>
   );
