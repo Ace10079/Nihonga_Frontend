@@ -6,12 +6,14 @@ function Checkout() {
   const [cart, setCart] = useState(null);
   const [userData, setUserData] = useState(null);
   const [address, setAddress] = useState({
+    fullName: "",
     address: "",
     city: "",
     state: "",
     pincode: "",
     phone: "",
   });
+
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -28,6 +30,7 @@ function Checkout() {
         setUserData(userInfo);
 
         setAddress({
+          fullName: `${userInfo.firstName || ""} ${userInfo.lastName || ""}`,
           address: userInfo.address || "",
           city: userInfo.city || "",
           state: userInfo.state || "",
@@ -47,13 +50,22 @@ function Checkout() {
     return cart.items.reduce((sum, item) => {
       const price = item.productId?.price || 0;
       return sum + price * item.quantity;
-    }, 0);
+    }, [cart]);
   }, [cart]);
 
   // Save updated address to user profile
   const saveAddress = async () => {
     try {
-      await userAPI.update(user._id, address);
+      const payload = {
+        firstName: address.fullName.split(" ")[0] || "",
+        lastName: address.fullName.split(" ")[1] || "",
+        address: address.address,
+        city: address.city,
+        state: address.state,
+        pincode: address.pincode,
+        phone: address.phone,
+      };
+      await userAPI.update(user._id, payload);
       alert("Address updated successfully!");
     } catch (err) {
       console.error("Error saving address:", err);
@@ -62,18 +74,17 @@ function Checkout() {
   };
 
   // Place order
- // Place order
-const placeOrder = async () => {
+  const placeOrder = async () => {
     if (!cart?.items?.length) return alert("Your cart is empty!");
     if (!address.phone || !address.address || !address.city || !address.state || !address.pincode)
       return alert("Please fill in all address fields.");
-  
+
     try {
       const payload = {
         userId: user._id,
-        customerName: `${userData.firstName} ${userData.lastName}`, // <-- REQUIRED
+        customerName: address.fullName,
         address: {
-          fullName: `${userData.firstName} ${userData.lastName}`,
+          fullName: address.fullName,
           phone: address.phone,
           street: address.address,
           city: address.city,
@@ -91,10 +102,10 @@ const placeOrder = async () => {
         paymentMethod: "COD",
         notes: "",
       };
-  
+
       await orderAPI.place(payload);
       await cartAPI.clear(user._id);
-  
+
       alert("Order placed successfully!");
       navigate("/orders");
     } catch (err) {
@@ -102,7 +113,6 @@ const placeOrder = async () => {
       alert("Failed to place order. Please try again.");
     }
   };
-  
 
   if (!user) {
     return (
@@ -113,7 +123,8 @@ const placeOrder = async () => {
     );
   }
 
-  if (!cart) return <div className="max-w-4xl mx-auto p-8">Loading...</div>;
+  if (!cart || !userData)
+    return <div className="max-w-4xl mx-auto p-8">Loading...</div>;
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -122,13 +133,15 @@ const placeOrder = async () => {
       {/* Shipping Address */}
       <div className="bg-white p-6 rounded-xl shadow-md mb-6">
         <h2 className="text-lg font-semibold mb-2">Shipping Address</h2>
+
         <input
           type="text"
           className="w-full border p-3 rounded-lg mb-2"
           placeholder="Full Name"
-          value={`${userData?.firstName || ""} ${userData?.lastName || ""}`}
-          disabled
+          value={address.fullName}
+          onChange={(e) => setAddress({ ...address, fullName: e.target.value })}
         />
+
         <input
           type="text"
           className="w-full border p-3 rounded-lg mb-2"
@@ -136,6 +149,7 @@ const placeOrder = async () => {
           value={address.phone}
           onChange={(e) => setAddress({ ...address, phone: e.target.value })}
         />
+
         <input
           type="text"
           className="w-full border p-3 rounded-lg mb-2"
@@ -143,6 +157,7 @@ const placeOrder = async () => {
           value={address.address}
           onChange={(e) => setAddress({ ...address, address: e.target.value })}
         />
+
         <div className="grid grid-cols-2 gap-2">
           <input
             type="text"
@@ -159,6 +174,7 @@ const placeOrder = async () => {
             onChange={(e) => setAddress({ ...address, state: e.target.value })}
           />
         </div>
+
         <input
           type="text"
           className="w-full border p-3 rounded-lg mt-2"
@@ -166,6 +182,7 @@ const placeOrder = async () => {
           value={address.pincode}
           onChange={(e) => setAddress({ ...address, pincode: e.target.value })}
         />
+
         <button
           onClick={saveAddress}
           className="mt-3 bg-gray-800 text-white px-4 py-2 rounded-lg"
@@ -179,7 +196,7 @@ const placeOrder = async () => {
         <h2 className="text-lg font-semibold mb-2">Order Summary</h2>
         {cart.items.map((item) => (
           <div
-            key={item.productId._id}
+            key={item.productId._id + item.size}
             className="flex justify-between border-b py-2"
           >
             <span>
