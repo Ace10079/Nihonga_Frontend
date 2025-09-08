@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { cartAPI, BASE_URL } from "../API"; // <-- Import BASE_URL
-import { Link } from "react-router-dom";
+import { cartAPI, BASE_URL } from "../API";
+import { Link, useNavigate } from "react-router-dom"; // <-- Import useNavigate
 
 function Cart() {
   const [cart, setCart] = useState(null);
   const user = JSON.parse(localStorage.getItem("user"));
+  const navigate = useNavigate(); // <-- Initialize navigate
 
   const fetchCart = async () => {
     if (!user) return setCart({ items: [] });
@@ -67,7 +68,7 @@ function Cart() {
           <div className="bg-white rounded-xl shadow overflow-hidden">
             {cart.items.map((item) => {
               const p = item.productId || {};
-              const img = p.heroImage ? `${BASE_URL}${p.heroImage}` : ""; // <-- Updated here
+              const img = p.heroImage ? `${BASE_URL}${p.heroImage}` : "";
               return (
                 <div key={`${p._id}-${item.size}`} className="flex items-center gap-4 p-4 border-b last:border-b-0">
                   <img src={img} alt={p.name} className="w-24 h-24 object-cover rounded-md" />
@@ -105,7 +106,7 @@ function Cart() {
               <p className="text-xl font-semibold">Subtotal: ₹{subtotal}</p>
               <button
                 className="mt-3 bg-black text-white px-6 py-3 rounded-lg"
-                onClick={() => window.location.href = "/checkout"}
+                onClick={() => navigate("/checkout")} // <-- FIXED HERE
               >
                 Checkout
               </button>
