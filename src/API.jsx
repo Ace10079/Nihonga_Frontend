@@ -1,11 +1,12 @@
-// src/API.jsx
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'https://nihonga-backend.onrender.com',
+  baseURL: 'https://nihonga-backend.onrender.com', // Direct URL instead of process.env
 });
+//https://nihonga-backend.onrender.com
+//http://localhost:5000
 
-export const BASE_URL = API.defaults.baseURL; // <-- Add this
+export const BASE_URL = API.defaults.baseURL;
 
 // User APIs
 export const userAPI = {
@@ -26,7 +27,7 @@ export const heroAPI = {
 
 export const productAPI = {
   getAll: () => API.get('/api/products'),
-  getById: (id) => API.get(`/api/products/get/${id}`), // <-- added this for detail page
+  getById: (id) => API.get(`/api/products/get/${id}`),
   create: (data) => API.post('/api/products', data),
 };
 

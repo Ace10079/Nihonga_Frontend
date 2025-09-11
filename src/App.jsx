@@ -21,7 +21,7 @@ function App() {
         <Navbar />
 
         {/* ✅ Page content below the Navbar */}
-        <main className="flex-grow p-4">
+        <main className="">
           <Routes>
             
               <Route path="/" element={<Home />} />

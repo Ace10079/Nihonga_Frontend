@@ -1,7 +1,7 @@
 // src/pages/ProductDetail.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { productAPI, cartAPI, BASE_URL } from "../API"; // <-- import BASE_URL
+import { productAPI, cartAPI, BASE_URL } from "../API";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -27,19 +27,16 @@ function ProductDetail() {
   if (!product) return <h2 className="text-center mt-10">Loading...</h2>;
 
   const stockStatus =
-    product.stock === 0 ? "Out of Stock"
-      : product.stock <= product.lowStockThreshold ? "Low Stock" : "In Stock";
+    product.stock === 0
+      ? "Out of Stock"
+      : product.stock <= product.lowStockThreshold
+      ? "Low Stock"
+      : "In Stock";
 
   const handleAddToCart = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
-      alert("Please log in to add items to your cart.");
-      return;
-    }
-    if (!selectedSize && product.sizes?.length) {
-      alert("Please select a size.");
-      return;
-    }
+    if (!user) return alert("Please log in to add items to your cart.");
+    if (!selectedSize && product.sizes?.length) return alert("Please select a size.");
 
     setAddingToCart(true);
     try {
@@ -61,7 +58,7 @@ function ProductDetail() {
     <div className="max-w-6xl mx-auto px-6 py-10">
       <Link
         to={`/collections/${product.collection}`}
-        className="text-blue-600 underline mb-6 inline-block"
+        className="text-[#d2b3db] font-medium hover:underline mb-6 inline-block"
       >
         ← Back to Collection
       </Link>
@@ -85,7 +82,9 @@ function ProductDetail() {
                     src={url}
                     alt={`Preview ${i + 1}`}
                     onClick={() => setMainImage(url)}
-                    className={`w-20 h-20 object-cover rounded-md cursor-pointer border-2 transition ${active ? "border-blue-600" : "border-transparent"}`}
+                    className={`w-20 h-20 object-cover rounded-md cursor-pointer border-2 transition ${
+                      active ? "border-[#d2b3db]" : "border-transparent"
+                    }`}
                   />
                 );
               })}
@@ -95,8 +94,8 @@ function ProductDetail() {
 
         {/* Right: Info */}
         <div>
-          <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
-          <p className="text-xl font-semibold text-green-600 mb-2">₹{product.price}</p>
+          <h1 className="text-3xl font-bold mb-2 text-black">{product.name}</h1>
+          <p className="text-xl font-semibold text-[#d2b3db] mb-2">₹{product.price}</p>
           <p
             className={`mb-4 font-medium ${
               stockStatus === "Out of Stock"
@@ -114,7 +113,7 @@ function ProductDetail() {
           {/* Size Selector */}
           {product.sizes?.length > 0 && (
             <div className="mb-6">
-              <h3 className="text-lg font-medium mb-3">Select Size</h3>
+              <h3 className="text-lg font-medium mb-3 text-black">Select Size</h3>
               <div className="flex gap-3 flex-wrap">
                 {product.sizes.map((size) => (
                   <button
@@ -122,8 +121,8 @@ function ProductDetail() {
                     onClick={() => setSelectedSize(size)}
                     className={`px-5 py-2 rounded-full border transition-all duration-300 ${
                       selectedSize === size
-                        ? "bg-blue-600 text-white border-blue-600 shadow-md scale-105"
-                        : "border-gray-300 text-gray-700 hover:border-blue-500 hover:text-blue-600"
+                        ? "bg-[#d2b3db] text-white border-[#d2b3db] shadow-md scale-105"
+                        : "border-gray-300 text-gray-700 hover:border-[#d2b3db] hover:text-[#d2b3db]"
                     }`}
                   >
                     {size}
@@ -138,7 +137,7 @@ function ProductDetail() {
             disabled={
               (product.sizes?.length && !selectedSize) || product.stock === 0 || addingToCart
             }
-            className="w-full lg:w-auto bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-8 py-3 rounded-full text-lg font-medium shadow-lg transition-transform duration-300 hover:scale-105 disabled:opacity-50"
+            className="w-full lg:w-auto bg-gradient-to-r from-[#d2b3db] to-[#b08fd8] hover:from-[#b08fd8] hover:to-[#d2b3db] text-white px-8 py-3 rounded-full text-lg font-medium shadow-lg transition-transform duration-300 hover:scale-105 disabled:opacity-50"
           >
             {addingToCart ? "Adding..." : "Add to Cart"}
           </button>

@@ -13,11 +13,11 @@ function Checkout() {
     pincode: "",
     phone: "",
   });
+  const [isAddressLoaded, setIsAddressLoaded] = useState(false);
 
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
 
-  // Fetch cart & user details
   useEffect(() => {
     if (!user) return;
 
@@ -29,31 +29,33 @@ function Checkout() {
         const { data: userInfo } = await userAPI.get(user._id);
         setUserData(userInfo);
 
-        setAddress({
-          fullName: `${userInfo.firstName || ""} ${userInfo.lastName || ""}`,
-          address: userInfo.address || "",
-          city: userInfo.city || "",
-          state: userInfo.state || "",
-          pincode: userInfo.pincode || "",
-          phone: userInfo.phone || "",
-        });
+        if (!isAddressLoaded) {
+          setAddress({
+            fullName: `${userInfo.firstName || ""} ${userInfo.lastName || ""}`,
+            address: userInfo.address || "",
+            city: userInfo.city || "",
+            state: userInfo.state || "",
+            pincode: userInfo.pincode || "",
+            phone: userInfo.phone || "",
+          });
+          setIsAddressLoaded(true);
+        }
       } catch (err) {
         console.error("Error fetching data:", err);
       }
     };
 
     fetchData();
-  }, [user]);
+  }, [user, isAddressLoaded]);
 
   const subtotal = useMemo(() => {
     if (!cart?.items) return 0;
     return cart.items.reduce((sum, item) => {
       const price = item.productId?.price || 0;
       return sum + price * item.quantity;
-    }, [cart]);
+    }, 0);
   }, [cart]);
 
-  // Save updated address to user profile
   const saveAddress = async () => {
     try {
       const payload = {
@@ -73,7 +75,6 @@ function Checkout() {
     }
   };
 
-  // Place order
   const placeOrder = async () => {
     if (!cart?.items?.length) return alert("Your cart is empty!");
     if (!address.phone || !address.address || !address.city || !address.state || !address.pincode)
@@ -116,7 +117,7 @@ function Checkout() {
 
   if (!user) {
     return (
-      <div className="max-w-4xl mx-auto p-8">
+      <div className="max-w-4xl mx-auto p-8 text-center">
         <h1 className="text-3xl font-bold mb-4">Checkout</h1>
         <p className="text-gray-600">Please log in to proceed with checkout.</p>
       </div>
@@ -124,19 +125,19 @@ function Checkout() {
   }
 
   if (!cart || !userData)
-    return <div className="max-w-4xl mx-auto p-8">Loading...</div>;
+    return <div className="max-w-4xl mx-auto p-8 text-center">Loading...</div>;
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">Checkout</h1>
+    <div className="max-w-4xl mx-auto p-6 flex flex-col gap-6">
+      <h1 className="text-3xl font-bold text-black">Checkout</h1>
 
       {/* Shipping Address */}
-      <div className="bg-white p-6 rounded-xl shadow-md mb-6">
-        <h2 className="text-lg font-semibold mb-2">Shipping Address</h2>
+      <div className="bg-white p-6 rounded-2xl shadow-md flex flex-col gap-3">
+        <h2 className="text-lg font-semibold text-black">Shipping Address</h2>
 
         <input
           type="text"
-          className="w-full border p-3 rounded-lg mb-2"
+          className="w-full border border-gray-300 p-3 rounded-xl focus:outline-none focus:border-[#d2b3db]"
           placeholder="Full Name"
           value={address.fullName}
           onChange={(e) => setAddress({ ...address, fullName: e.target.value })}
@@ -144,7 +145,7 @@ function Checkout() {
 
         <input
           type="text"
-          className="w-full border p-3 rounded-lg mb-2"
+          className="w-full border border-gray-300 p-3 rounded-xl focus:outline-none focus:border-[#d2b3db]"
           placeholder="Phone"
           value={address.phone}
           onChange={(e) => setAddress({ ...address, phone: e.target.value })}
@@ -152,7 +153,7 @@ function Checkout() {
 
         <input
           type="text"
-          className="w-full border p-3 rounded-lg mb-2"
+          className="w-full border border-gray-300 p-3 rounded-xl focus:outline-none focus:border-[#d2b3db]"
           placeholder="Street / Address"
           value={address.address}
           onChange={(e) => setAddress({ ...address, address: e.target.value })}
@@ -161,14 +162,14 @@ function Checkout() {
         <div className="grid grid-cols-2 gap-2">
           <input
             type="text"
-            className="border p-3 rounded-lg"
+            className="border border-gray-300 p-3 rounded-xl focus:outline-none focus:border-[#d2b3db]"
             placeholder="City"
             value={address.city}
             onChange={(e) => setAddress({ ...address, city: e.target.value })}
           />
           <input
             type="text"
-            className="border p-3 rounded-lg"
+            className="border border-gray-300 p-3 rounded-xl focus:outline-none focus:border-[#d2b3db]"
             placeholder="State"
             value={address.state}
             onChange={(e) => setAddress({ ...address, state: e.target.value })}
@@ -177,7 +178,7 @@ function Checkout() {
 
         <input
           type="text"
-          className="w-full border p-3 rounded-lg mt-2"
+          className="w-full border border-gray-300 p-3 rounded-xl focus:outline-none focus:border-[#d2b3db]"
           placeholder="Pincode"
           value={address.pincode}
           onChange={(e) => setAddress({ ...address, pincode: e.target.value })}
@@ -185,27 +186,22 @@ function Checkout() {
 
         <button
           onClick={saveAddress}
-          className="mt-3 bg-gray-800 text-white px-4 py-2 rounded-lg"
+          className="mt-3 bg-[#d2b3db] text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition"
         >
           Save Address
         </button>
       </div>
 
       {/* Order Summary */}
-      <div className="bg-white p-6 rounded-xl shadow-md mb-6">
-        <h2 className="text-lg font-semibold mb-2">Order Summary</h2>
+      <div className="bg-white p-6 rounded-2xl shadow-md flex flex-col gap-3">
+        <h2 className="text-lg font-semibold text-black">Order Summary</h2>
         {cart.items.map((item) => (
-          <div
-            key={item.productId._id + item.size}
-            className="flex justify-between border-b py-2"
-          >
-            <span>
-              {item.productId.name} (x{item.quantity})
-            </span>
-            <span>₹{item.productId.price * item.quantity}</span>
+          <div key={item.productId._id + item.size} className="flex justify-between py-2 border-b last:border-b-0">
+            <span className="text-black">{item.productId.name} (x{item.quantity})</span>
+            <span className="text-black">₹{item.productId.price * item.quantity}</span>
           </div>
         ))}
-        <div className="flex justify-between font-bold text-lg mt-4">
+        <div className="flex justify-between font-bold text-lg mt-4 text-black">
           <span>Total</span>
           <span>₹{subtotal}</span>
         </div>
@@ -213,7 +209,7 @@ function Checkout() {
 
       <button
         onClick={placeOrder}
-        className="w-full bg-black text-white py-3 rounded-lg text-lg"
+        className="w-full bg-black text-white py-3 rounded-xl font-semibold text-lg hover:opacity-90 transition"
       >
         Place Order
       </button>
