@@ -44,5 +44,11 @@ export const orderAPI = {
   getByUser: (userId) => API.get(`/api/orders/user/${userId}`),
   getById: (orderId) => API.get(`/api/orders/${orderId}`),
 };
+export const wishlistAPI = {
+  add: (payload) => API.post("/api/wishlist/add", payload),
+  remove: (payload) => API.post("/api/wishlist/remove", payload),
+  get: (userId) => API.get(`/api/wishlist/${userId}`),
+};
+
 
 export default API;

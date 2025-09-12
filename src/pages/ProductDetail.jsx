@@ -1,7 +1,8 @@
 // src/pages/ProductDetail.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { productAPI, cartAPI, BASE_URL } from "../API";
+import { productAPI, cartAPI, BASE_URL, wishlistAPI } from "../API";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai"; // Heart icons
 
 function ProductDetail() {
   const { id } = useParams();
@@ -10,7 +11,12 @@ function ProductDetail() {
   const [selectedSize, setSelectedSize] = useState("");
   const [mainImage, setMainImage] = useState("");
   const [addingToCart, setAddingToCart] = useState(false);
+  const [wishlist, setWishlist] = useState([]);
+  const [isWishlistLoading, setIsWishlistLoading] = useState(false);
 
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  // Fetch product and wishlist
   useEffect(() => {
     (async () => {
       try {
@@ -18,11 +24,16 @@ function ProductDetail() {
         setProduct(data);
         setSelectedSize(data.sizes?.[0] || "");
         setMainImage(`${BASE_URL}${data.heroImage}`);
+
+        if (user) {
+          const { data: wishlistData } = await wishlistAPI.get(user._id);
+          setWishlist(wishlistData.map((p) => p._id));
+        }
       } catch (error) {
         console.error("Error fetching product:", error);
       }
     })();
-  }, [id]);
+  }, [id, user]);
 
   if (!product) return <h2 className="text-center mt-10">Loading...</h2>;
 
@@ -34,7 +45,6 @@ function ProductDetail() {
       : "In Stock";
 
   const handleAddToCart = async () => {
-    const user = JSON.parse(localStorage.getItem("user"));
     if (!user) return alert("Please log in to add items to your cart.");
     if (!selectedSize && product.sizes?.length) return alert("Please select a size.");
 
@@ -53,6 +63,27 @@ function ProductDetail() {
       setAddingToCart(false);
     }
   };
+
+  const toggleWishlist = async () => {
+    if (!user) return alert("Please log in to manage your wishlist.");
+    setIsWishlistLoading(true);
+    try {
+      if (wishlist.includes(product._id)) {
+        await wishlistAPI.remove({ userId: user._id, productId: product._id });
+        setWishlist((prev) => prev.filter((id) => id !== product._id));
+      } else {
+        await wishlistAPI.add({ userId: user._id, productId: product._id });
+        setWishlist((prev) => [...prev, product._id]);
+      }
+    } catch (err) {
+      alert("Failed to update wishlist");
+      console.error(err);
+    } finally {
+      setIsWishlistLoading(false);
+    }
+  };
+
+  const isInWishlist = wishlist.includes(product._id);
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-10">
@@ -94,7 +125,17 @@ function ProductDetail() {
 
         {/* Right: Info */}
         <div>
-          <h1 className="text-3xl font-bold mb-2 text-black">{product.name}</h1>
+          <div className="flex items-center justify-between mb-2">
+            <h1 className="text-3xl font-bold text-black">{product.name}</h1>
+            <button
+              onClick={toggleWishlist}
+              disabled={isWishlistLoading}
+              className="text-2xl transition hover:text-[#d2b3db]"
+            >
+              {isInWishlist ? <AiFillHeart className="text-[#d2b3db]" /> : <AiOutlineHeart />}
+            </button>
+          </div>
+
           <p className="text-xl font-semibold text-[#d2b3db] mb-2">₹{product.price}</p>
           <p
             className={`mb-4 font-medium ${
