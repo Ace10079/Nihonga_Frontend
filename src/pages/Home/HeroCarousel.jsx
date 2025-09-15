@@ -17,7 +17,7 @@ const HeroCarousel = ({ images }) => {
         {images.map((hero, idx) => (
           <div
             key={hero.id}
-            className="relative overflow-hidden group rounded-xl sm:rounded-2xl"
+            className="relative overflow-hidden group"
           >
             <img
               src={hero.image}

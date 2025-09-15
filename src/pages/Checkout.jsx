@@ -1,6 +1,39 @@
+// src/pages/Checkout.jsx
 import React, { useEffect, useState, useMemo } from "react";
 import { cartAPI, orderAPI, userAPI } from "../API";
 import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import Select from "react-select";
+import makeAnimated from "react-select/animated";
+
+// ✅ All Indian states with major cities
+const stateCityData = {
+  Maharashtra: ["Mumbai", "Pune", "Nagpur", "Nashik", "Aurangabad"],
+  Karnataka: ["Bengaluru", "Mysuru", "Mangalore", "Hubli", "Belagavi"],
+  Gujarat: ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar"],
+  Delhi: ["New Delhi", "Dwarka", "Saket", "Karol Bagh"],
+  Rajasthan: ["Jaipur", "Udaipur", "Jodhpur", "Ajmer", "Kota"],
+  UttarPradesh: ["Lucknow", "Kanpur", "Varanasi", "Noida", "Ghaziabad"],
+  WestBengal: ["Kolkata", "Siliguri", "Howrah", "Durgapur", "Asansol"],
+  TamilNadu: ["Chennai", "Coimbatore", "Madurai", "Salem", "Tirunelveli"],
+  Kerala: ["Kochi", "Thiruvananthapuram", "Kozhikode", "Thrissur"],
+  Punjab: ["Amritsar", "Ludhiana", "Jalandhar", "Patiala"],
+  Haryana: ["Gurugram", "Faridabad", "Panipat", "Ambala"],
+  Telangana: ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar"],
+  AndhraPradesh: ["Vijayawada", "Visakhapatnam", "Guntur", "Nellore"],
+  MadhyaPradesh: ["Bhopal", "Indore", "Jabalpur", "Gwalior", "Ujjain"],
+  Bihar: ["Patna", "Gaya", "Muzaffarpur", "Bhagalpur"],
+  Jharkhand: ["Ranchi", "Jamshedpur", "Dhanbad", "Bokaro"],
+  Odisha: ["Bhubaneswar", "Cuttack", "Rourkela", "Puri"],
+  Assam: ["Guwahati", "Silchar", "Dibrugarh", "Jorhat"],
+  Chhattisgarh: ["Raipur", "Bhilai", "Bilaspur", "Korba"],
+  JammuKashmir: ["Srinagar", "Jammu", "Leh"],
+  HimachalPradesh: ["Shimla", "Manali", "Dharamshala"],
+  Uttarakhand: ["Dehradun", "Haridwar", "Rishikesh"],
+  Goa: ["Panaji", "Margao", "Vasco da Gama"],
+};
+
+const animatedComponents = makeAnimated();
 
 function Checkout() {
   const [cart, setCart] = useState(null);
@@ -15,12 +48,15 @@ function Checkout() {
   });
   const [isAddressLoaded, setIsAddressLoaded] = useState(false);
 
+  const [successMessage, setSuccessMessage] = useState(""); // ✅ animated success msg
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
 
+  // Fetch cart + user data
   useEffect(() => {
     if (!user) return;
-
     const fetchData = async () => {
       try {
         const { data: cartData } = await cartAPI.get(user._id);
@@ -44,10 +80,10 @@ function Checkout() {
         console.error("Error fetching data:", err);
       }
     };
-
     fetchData();
   }, [user, isAddressLoaded]);
 
+  // Calculate subtotal
   const subtotal = useMemo(() => {
     if (!cart?.items) return 0;
     return cart.items.reduce((sum, item) => {
@@ -56,6 +92,17 @@ function Checkout() {
     }, 0);
   }, [cart]);
 
+  // Dropdown Options
+  const stateOptions = Object.keys(stateCityData).map((st) => ({
+    value: st,
+    label: st,
+  }));
+  const cityOptions =
+    address.state && stateCityData[address.state]
+      ? stateCityData[address.state].map((ct) => ({ value: ct, label: ct }))
+      : [];
+
+  // Save Address
   const saveAddress = async () => {
     try {
       const payload = {
@@ -68,19 +115,23 @@ function Checkout() {
         phone: address.phone,
       };
       await userAPI.update(user._id, payload);
-      alert("Address updated successfully!");
+
+      setSuccessMessage("✅ Address updated successfully!");
+      setTimeout(() => setSuccessMessage(""), 2000);
     } catch (err) {
       console.error("Error saving address:", err);
-      alert("Failed to save address.");
     }
   };
 
+  // Place Order
   const placeOrder = async () => {
-    if (!cart?.items?.length) return alert("Your cart is empty!");
+    if (!cart?.items?.length) return;
+
     if (!address.phone || !address.address || !address.city || !address.state || !address.pincode)
-      return alert("Please fill in all address fields.");
+      return;
 
     try {
+      setLoading(true);
       const payload = {
         userId: user._id,
         customerName: address.fullName,
@@ -107,11 +158,15 @@ function Checkout() {
       await orderAPI.place(payload);
       await cartAPI.clear(user._id);
 
-      alert("Order placed successfully!");
-      navigate("/orders");
+      setSuccessMessage("🎉 Order placed successfully!");
+      setTimeout(() => {
+        setSuccessMessage("");
+        navigate("/orders");
+      }, 2000);
     } catch (err) {
       console.error("Place Order Error:", err);
-      alert("Failed to place order. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -128,8 +183,24 @@ function Checkout() {
     return <div className="max-w-4xl mx-auto p-8 text-center">Loading...</div>;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 flex flex-col gap-6">
+    <div className="max-w-4xl mx-auto p-6 flex flex-col gap-6 relative">
       <h1 className="text-3xl font-bold text-black">Checkout</h1>
+
+      {/* ✅ Success Animation */}
+      <AnimatePresence>
+        {successMessage && (
+          <motion.div
+            key="success"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 40 }}
+            transition={{ duration: 0.4 }}
+            className="fixed bottom-6 right-6 bg-green-500 text-white px-6 py-3 rounded-2xl shadow-xl flex items-center gap-2"
+          >
+            ✅ {successMessage}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Shipping Address */}
       <div className="bg-white p-6 rounded-2xl shadow-md flex flex-col gap-3">
@@ -159,22 +230,26 @@ function Checkout() {
           onChange={(e) => setAddress({ ...address, address: e.target.value })}
         />
 
-        <div className="grid grid-cols-2 gap-2">
-          <input
-            type="text"
-            className="border border-gray-300 p-3 rounded-xl focus:outline-none focus:border-[#d2b3db]"
-            placeholder="City"
-            value={address.city}
-            onChange={(e) => setAddress({ ...address, city: e.target.value })}
-          />
-          <input
-            type="text"
-            className="border border-gray-300 p-3 rounded-xl focus:outline-none focus:border-[#d2b3db]"
-            placeholder="State"
-            value={address.state}
-            onChange={(e) => setAddress({ ...address, state: e.target.value })}
-          />
-        </div>
+        {/* State Dropdown */}
+        <Select
+          options={stateOptions}
+          components={animatedComponents}
+          value={stateOptions.find((st) => st.value === address.state) || null}
+          onChange={(opt) => setAddress({ ...address, state: opt.value, city: "" })}
+          placeholder="Select State"
+          isSearchable
+        />
+
+        {/* City Dropdown */}
+        <Select
+          options={cityOptions}
+          components={animatedComponents}
+          value={cityOptions.find((ct) => ct.value === address.city) || null}
+          onChange={(opt) => setAddress({ ...address, city: opt.value })}
+          placeholder="Select City"
+          isDisabled={!address.state}
+          isSearchable
+        />
 
         <input
           type="text"
@@ -196,8 +271,13 @@ function Checkout() {
       <div className="bg-white p-6 rounded-2xl shadow-md flex flex-col gap-3">
         <h2 className="text-lg font-semibold text-black">Order Summary</h2>
         {cart.items.map((item) => (
-          <div key={item.productId._id + item.size} className="flex justify-between py-2 border-b last:border-b-0">
-            <span className="text-black">{item.productId.name} (x{item.quantity})</span>
+          <div
+            key={item.productId._id + item.size}
+            className="flex justify-between py-2 border-b last:border-b-0"
+          >
+            <span className="text-black">
+              {item.productId.name} (x{item.quantity})
+            </span>
             <span className="text-black">₹{item.productId.price * item.quantity}</span>
           </div>
         ))}
@@ -209,9 +289,10 @@ function Checkout() {
 
       <button
         onClick={placeOrder}
-        className="w-full bg-black text-white py-3 rounded-xl font-semibold text-lg hover:opacity-90 transition"
+        disabled={loading}
+        className="w-full bg-black text-white py-3 rounded-xl font-semibold text-lg hover:opacity-90 transition disabled:opacity-50"
       >
-        Place Order
+        {loading ? "Placing Order..." : "Place Order"}
       </button>
     </div>
   );

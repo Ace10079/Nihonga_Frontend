@@ -9,7 +9,7 @@ const ProfileDashboard = ({ user, onLogout }) => {
   return (
     <div className="flex flex-col gap-6 max-w-4xl mx-auto p-6 bg-white rounded-3xl shadow-lg">
       <h2 className="text-2xl font-bold text-center text-black mb-4">My Account</h2>
-      
+
       {/* Navigation Tabs */}
       <div className="flex justify-center gap-4 border-b border-gray-200 mb-6">
         {["profile", "orders"].map((tab) => (
@@ -35,7 +35,9 @@ const ProfileDashboard = ({ user, onLogout }) => {
         transition={{ duration: 0.4 }}
       >
         {activeTab === "profile" && <EditProfile user={user} />}
-        {activeTab === "orders" && <OrderHistory user={user} />}
+        {activeTab === "orders" && (
+          <OrderHistory user={user} embedded={true} limit={3} />
+        )}
       </motion.div>
 
       {/* Logout Button */}

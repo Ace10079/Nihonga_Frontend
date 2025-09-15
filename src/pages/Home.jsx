@@ -47,7 +47,7 @@ function Home() {
   }
 
   return (
-    <div className="space-y-16">
+    <div className="space-y-5">
       <HeroCarousel
         images={heros.map((hero) => ({
           id: hero._id,

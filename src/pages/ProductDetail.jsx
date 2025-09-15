@@ -2,28 +2,34 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { productAPI, cartAPI, BASE_URL, wishlistAPI } from "../API";
-import { AiOutlineHeart, AiFillHeart } from "react-icons/ai"; // Heart icons
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { motion, AnimatePresence } from "framer-motion";
 
 function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
-  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedSize, setSelectedSize] = useState(null);
   const [mainImage, setMainImage] = useState("");
   const [addingToCart, setAddingToCart] = useState(false);
   const [wishlist, setWishlist] = useState([]);
   const [isWishlistLoading, setIsWishlistLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  // Fetch product and wishlist
+  // Fetch product + wishlist
   useEffect(() => {
     (async () => {
       try {
         const { data } = await productAPI.getById(id);
         setProduct(data);
-        setSelectedSize(data.sizes?.[0] || "");
-        setMainImage(`${BASE_URL}${data.heroImage}`);
+
+        // ✅ only set size if not already chosen
+        setSelectedSize((prev) => prev ?? (data.sizes?.length > 0 ? null : null));
+
+        // ✅ only set mainImage once
+        setMainImage((prev) => prev || `${BASE_URL}${data.heroImage}`);
 
         if (user) {
           const { data: wishlistData } = await wishlistAPI.get(user._id);
@@ -45,8 +51,11 @@ function ProductDetail() {
       : "In Stock";
 
   const handleAddToCart = async () => {
-    if (!user) return alert("Please log in to add items to your cart.");
-    if (!selectedSize && product.sizes?.length) return alert("Please select a size.");
+    if (!user) {
+      navigate("/account");
+      return;
+    }
+    if (product.sizes?.length > 0 && !selectedSize) return;
 
     setAddingToCart(true);
     try {
@@ -56,16 +65,21 @@ function ProductDetail() {
         size: selectedSize || "",
         quantity: 1,
       });
-      navigate("/cart");
+
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 2000);
     } catch (e) {
-      alert("Failed to add item to cart");
+      console.error("Failed to add item to cart", e);
     } finally {
       setAddingToCart(false);
     }
   };
 
   const toggleWishlist = async () => {
-    if (!user) return alert("Please log in to manage your wishlist.");
+    if (!user) {
+      navigate("/account");
+      return;
+    }
     setIsWishlistLoading(true);
     try {
       if (wishlist.includes(product._id)) {
@@ -76,8 +90,7 @@ function ProductDetail() {
         setWishlist((prev) => [...prev, product._id]);
       }
     } catch (err) {
-      alert("Failed to update wishlist");
-      console.error(err);
+      console.error("Failed to update wishlist", err);
     } finally {
       setIsWishlistLoading(false);
     }
@@ -86,7 +99,7 @@ function ProductDetail() {
   const isInWishlist = wishlist.includes(product._id);
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-10">
+    <div className="max-w-6xl mx-auto px-6 py-10 relative">
       <Link
         to={`/collections/${product.collection}`}
         className="text-[#d2b3db] font-medium hover:underline mb-6 inline-block"
@@ -105,7 +118,7 @@ function ProductDetail() {
           {product.showcaseImages?.length > 0 && (
             <div className="flex gap-3 mt-2">
               {[product.heroImage, ...product.showcaseImages].map((img, i) => {
-                const url = `${BASE_URL}${img}`;
+                const url = img.startsWith("http") ? img : `${BASE_URL}${img}`;
                 const active = mainImage === url;
                 return (
                   <img
@@ -132,11 +145,17 @@ function ProductDetail() {
               disabled={isWishlistLoading}
               className="text-2xl transition hover:text-[#d2b3db]"
             >
-              {isInWishlist ? <AiFillHeart className="text-[#d2b3db]" /> : <AiOutlineHeart />}
+              {isInWishlist ? (
+                <AiFillHeart className="text-[#d2b3db]" />
+              ) : (
+                <AiOutlineHeart />
+              )}
             </button>
           </div>
 
-          <p className="text-xl font-semibold text-[#d2b3db] mb-2">₹{product.price}</p>
+          <p className="text-xl font-semibold text-[#d2b3db] mb-2">
+            ₹{product.price}
+          </p>
           <p
             className={`mb-4 font-medium ${
               stockStatus === "Out of Stock"
@@ -176,7 +195,9 @@ function ProductDetail() {
           <button
             onClick={handleAddToCart}
             disabled={
-              (product.sizes?.length && !selectedSize) || product.stock === 0 || addingToCart
+              (product.sizes?.length > 0 && !selectedSize) ||
+              product.stock === 0 ||
+              addingToCart
             }
             className="w-full lg:w-auto bg-gradient-to-r from-[#d2b3db] to-[#b08fd8] hover:from-[#b08fd8] hover:to-[#d2b3db] text-white px-8 py-3 rounded-full text-lg font-medium shadow-lg transition-transform duration-300 hover:scale-105 disabled:opacity-50"
           >
@@ -184,6 +205,21 @@ function ProductDetail() {
           </button>
         </div>
       </div>
+
+      {/* Success Animation */}
+      <AnimatePresence>
+        {showSuccess && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ duration: 0.4 }}
+            className="fixed bottom-6 right-6 bg-green-500 text-white px-6 py-3 rounded-full shadow-lg"
+          >
+            ✅ Product added to cart!
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

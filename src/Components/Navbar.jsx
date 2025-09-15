@@ -63,7 +63,7 @@ function Navbar() {
   }, [isMenuOpen]);
 
   const iconBtnClass =
-    "flex items-center justify-center w-10 h-10 rounded-full hover:bg-purple-100 transition-all duration-300 text-purple-700 hover:scale-110";
+    "flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full hover:bg-purple-100 transition-all duration-300 text-purple-700 hover:scale-110";
 
   return (
     <div
@@ -95,14 +95,14 @@ function Navbar() {
         </div>
 
         {/* Right: Actions */}
-        <div className="flex md:space-x-3 space-x-1 items-center text-gray-700">
+        <div className="flex md:space-x-3 space-x-0.5 items-center text-gray-700">
           {/* Account */}
           <button
             onClick={() => navigate("/account")}
             className={iconBtnClass}
             title="Account"
           >
-            <User size={22} />
+            <User size={20} className="md:size-[22px]" />
           </button>
 
           {/* Search */}
@@ -111,34 +111,32 @@ function Navbar() {
             className={iconBtnClass}
             title="Search"
           >
-            <Search size={22} />
+            <Search size={20} className="md:size-[22px]" />
           </button>
 
-         
-          {/* Wishlist */}
-<button
-  onClick={() => navigate("/wishlist")}
-  className="hidden md:flex relative items-center justify-center w-10 h-10 rounded-full hover:bg-purple-100 transition-all duration-300 text-purple-700 hover:scale-110"
-  title="Wishlist"
->
-  <Heart size={22} />
-  {wishlistCount > 0 && (
-    <span className="absolute -top-1 -right-1 bg-purple-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
-      {wishlistCount}
-    </span>
-  )}
-</button>
-
+          {/* Wishlist (hidden on mobile) */}
+          <button
+            onClick={() => navigate("/wishlist")}
+            className="hidden md:flex relative items-center justify-center w-10 h-10 rounded-full hover:bg-purple-100 transition-all duration-300 text-purple-700 hover:scale-110"
+            title="Wishlist"
+          >
+            <Heart size={22} />
+            {wishlistCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-purple-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
+                {wishlistCount}
+              </span>
+            )}
+          </button>
 
           {/* Cart */}
           <button
             onClick={() => navigate("/cart")}
-            className="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-purple-100 transition-all duration-300 text-purple-700 hover:scale-110"
+            className={`relative ${iconBtnClass}`}
             title="Cart"
           >
-            <ShoppingCart size={22} />
+            <ShoppingCart size={20} className="md:size-[22px]" />
             {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-purple-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
+              <span className="absolute -top-1 -right-1 bg-purple-600 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center animate-pulse">
                 {cartCount}
               </span>
             )}
