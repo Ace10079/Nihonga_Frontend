@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:5000', // Direct URL instead of process.env
+  baseURL: 'https://nihonga-backend.onrender.com', // Direct URL instead of process.env
 });
 //https://nihonga-backend.onrender.com
 //http://localhost:5000
