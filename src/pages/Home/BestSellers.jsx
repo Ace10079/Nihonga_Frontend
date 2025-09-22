@@ -2,14 +2,13 @@ const BestSellers = ({ products }) => {
   return (
     <section className="max-w-6xl mx-auto px-4 py-12 font-['Tenor Sans']">
       <h2
-        className="text-3xl font-bold mb-10 text-center"
-        style={{ color: "#e9f3ff" }}
+        className="text-5xl font-bold mb-10 text-center italiana-regular"
       >
         Our Best Sellers
       </h2>
 
       {/* Wrapper: scroll-snap for mobile */}
-      <div className="flex sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-10 overflow-x-auto sm:overflow-hidden no-scrollbar scroll-smooth snap-x snap-mandatory">
+      <div className="flex sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-10 overflow-x-auto sm:overflow-hidden no-scrollbar scroll-smooth snap-x snap-mandatory tenor-sans-regular">
         {products.map((item, idx) => (
           <div
             key={idx}

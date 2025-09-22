@@ -17,7 +17,7 @@ function ContactUs() {
 
   return (
     <div className="bg-[#fdfaff] font-['Tenor Sans'] text-gray-800">
-      <section className="max-w-6xl mx-auto px-6 py-16">
+      <section className="max-w-6xl mx-auto px-6 py-16 italiana-regular">
         {/* Heading */}
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
@@ -29,7 +29,7 @@ function ContactUs() {
           📬 Get in <span className="text-[#d2b3db]">Touch</span>
         </motion.h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 tenor-sans-regular">
           {/* Form Section */}
           <motion.form
             onSubmit={handleSubmit}

@@ -30,22 +30,22 @@ const OrderHistory = ({ embedded = false, limit = null }) => {
   }, [user, limit]);
 
   if (!user)
-    return <div className="text-center py-6">Please login to see your orders.</div>;
+    return <div className="text-center py-6 tenor-sans-regular">Please login to see your orders.</div>;
   if (loading)
-    return <div className="text-center py-6 text-gray-600">Loading orders...</div>;
+    return <div className="text-center py-6 text-gray-600 tenor-sans-regular">Loading orders...</div>;
   if (orders.length === 0)
-    return <div className="text-center py-6 text-gray-600">No orders found.</div>;
+    return <div className="text-center py-6 text-gray-600 tenor-sans-regular">No orders found.</div>;
 
   return (
     <div className={`${embedded ? "w-full" : "max-w-6xl mx-auto px-4 py-6"}`}>
       {!embedded && (
-        <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+        <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center italiana-regular">
           Your Orders
         </h3>
       )}
 
       {/* ✅ always stack in one column */}
-      <div className="space-y-4">
+      <div className="space-y-4 tenor-sans-regular">
         {orders.map((order) => (
           <motion.div
             key={order._id}

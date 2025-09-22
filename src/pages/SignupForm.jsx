@@ -26,18 +26,18 @@ const SignupForm = ({ onSignupSuccess, onSwitchToLogin, setLoading }) => {
   };
 
   return (
-    <form onSubmit={handleSignup} className="flex flex-col gap-4">
-      <h2 className="text-xl font-semibold text-center">Sign Up</h2>
+    <form onSubmit={handleSignup} className="flex flex-col gap-4 tenor-sans-regular">
+      <h2 className="text-xl font-semibold text-center tenor-sans-regular">Sign Up</h2>
       <Input label="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
       <Input label="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
       <Input label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
       <Input label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
 
-      <button type="submit" className="bg-green-500 text-white py-2 rounded hover:bg-green-600 transition">
+      <button type="submit" className="bg-green-500 text-white py-2 rounded hover:bg-green-600 transition tenor-sans-regular">
         Sign Up
       </button>
 
-      <p onClick={onSwitchToLogin} className="text-center text-sm text-blue-500 cursor-pointer hover:underline">
+      <p onClick={onSwitchToLogin} className="text-center text-sm text-blue-500 cursor-pointer hover:underline tenor-sans-regular">
         Already have an account? Login
       </p>
     </form>

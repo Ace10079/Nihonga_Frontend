@@ -43,7 +43,7 @@ function Cart() {
     return (
       <div className="max-w-4xl mx-auto p-8 text-center">
         <h1 className="text-3xl font-bold mb-4">🛒 Shopping Cart</h1>
-        <p className="text-gray-600">
+        <p className="text-gray-600 tenor-sans-regular">
           Please <Link to="/account" className="text-[#d2b3db] underline">log in</Link> to view your cart.
         </p>
       </div>
@@ -53,7 +53,7 @@ function Cart() {
   if (!cart) return <div className="max-w-4xl mx-auto p-8 text-center">Loading...</div>;
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="max-w-5xl mx-auto p-6 tenor-sans-regular">
       <h1 className="text-3xl font-bold mb-6 text-black">🛒 Shopping Cart</h1>
 
       {cart.items?.length === 0 ? (
@@ -63,7 +63,7 @@ function Cart() {
         </div>
       ) : (
         <>
-          <div className="bg-white rounded-2xl shadow-md overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-md overflow-hidden tenor-sans-regular">
             {cart.items.map((item) => {
               const p = item.productId || {};
               const img = p.heroImage ? `${BASE_URL}${p.heroImage}` : "";
@@ -98,7 +98,7 @@ function Cart() {
             })}
           </div>
 
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between mt-6 gap-4">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mt-6 gap-4 tenor-sans-regular">
             <button onClick={clear} className="text-gray-600 hover:underline">Clear cart</button>
             <div className="text-right">
               <p className="text-xl font-semibold text-black">Subtotal: ₹{subtotal}</p>

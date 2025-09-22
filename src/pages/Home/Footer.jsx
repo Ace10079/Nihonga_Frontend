@@ -8,12 +8,12 @@ const Footer = () => {
         {/* Brand Section */}
         <div>
           <h2
-            className="text-2xl font-bold mb-3 tracking-wide"
+            className="text-2xl font-bold mb-3 tracking-wide italiana-regular"
             style={{ color: "#e9f3ff" }}
           >
             Nihonga
           </h2>
-          <p className="text-sm leading-relaxed" style={{ color: "#000000" }}>
+          <p className="text-sm leading-relaxed tenor-sans-regular" style={{ color: "#000000" }}>
             Bridging tradition and modernity through art. Discover timeless
             designs and elegant collections crafted with passion.
           </p>
@@ -22,12 +22,12 @@ const Footer = () => {
         {/* Links */}
         <div>
           <h3
-            className="text-lg font-semibold mb-3"
+            className="text-lg font-semibold mb-3 italiana-regular"
             style={{ color: "#e9f3ff" }}
           >
             Quick Links
           </h3>
-          <ul className="space-y-2">
+          <ul className="space-y-2 tenor-sans-regular">
             <li>
               <a
                 href="#"
@@ -70,7 +70,7 @@ const Footer = () => {
         {/* Social Media */}
         <div>
           <h3
-            className="text-lg font-semibold mb-3"
+            className="text-lg font-semibold mb-3 italiana-regular"
             style={{ color: "#e9f3ff" }}
           >
             Connect With Us
@@ -105,7 +105,7 @@ const Footer = () => {
 
       {/* Bottom Bar */}
       <div
-        className="text-center py-4 text-sm"
+        className="text-center py-4 text-sm italiana-regular font-bold"
         style={{ backgroundColor: "#e9f3ff", color: "#000000" }}
       >
         © 2025 Nihonga. All rights reserved.

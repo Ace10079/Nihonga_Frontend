@@ -102,11 +102,11 @@ const EditProfile = () => {
     setLoading(false);
   };
 
-  if (!user) return <div className="text-center py-6">Loading profile...</div>;
+  if (!user) return <div className="text-center py-6 tenor-sans-regular">Loading profile...</div>;
 
   return (
     <motion.div
-      className="flex flex-col gap-4 p-6 bg-white rounded-3xl shadow-xl max-w-3xl mx-auto"
+      className="flex flex-col gap-4 p-6 bg-white rounded-3xl shadow-xl max-w-3xl mx-auto tenor-sans-regular"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -139,7 +139,7 @@ const EditProfile = () => {
       </AnimatePresence>
 
       {/* Name fields */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 tenor-sans-regular">
         <Input
           label="First Name"
           value={profile.firstName}
@@ -167,7 +167,7 @@ const EditProfile = () => {
 
       {/* State Dropdown */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1 tenor-sans-regular">State</label>
         <Select
           options={stateOptions}
           components={animatedComponents}
@@ -180,7 +180,7 @@ const EditProfile = () => {
 
       {/* City Dropdown */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1 tenor-sans-regular">City</label>
         <Select
           options={cityOptions}
           components={animatedComponents}
@@ -206,7 +206,7 @@ const EditProfile = () => {
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         animate={saved ? { scale: [1, 1.05, 1] } : {}}
-        className="bg-[#d2b3db] text-white py-3 rounded-xl font-semibold shadow-md transition-all duration-300 disabled:opacity-70 mt-4"
+        className="bg-[#d2b3db] text-white py-3 rounded-xl font-semibold shadow-md transition-all duration-300 disabled:opacity-70 mt-4 tenor-sans-regular"
       >
         {loading ? (
           <motion.span

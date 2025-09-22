@@ -174,7 +174,7 @@ function Checkout() {
     return (
       <div className="max-w-4xl mx-auto p-8 text-center">
         <h1 className="text-3xl font-bold mb-4">Checkout</h1>
-        <p className="text-gray-600">Please log in to proceed with checkout.</p>
+        <p className="text-gray-600 tenor-sans-regular">Please log in to proceed with checkout.</p>
       </div>
     );
   }
@@ -183,7 +183,7 @@ function Checkout() {
     return <div className="max-w-4xl mx-auto p-8 text-center">Loading...</div>;
 
   return (
-    <div className="max-w-4xl mx-auto p-6 flex flex-col gap-6 relative">
+    <div className="max-w-4xl mx-auto p-6 flex flex-col gap-6 relative tenor-sans-regular">
       <h1 className="text-3xl font-bold text-black">Checkout</h1>
 
       {/* ✅ Success Animation */}
@@ -203,7 +203,7 @@ function Checkout() {
       </AnimatePresence>
 
       {/* Shipping Address */}
-      <div className="bg-white p-6 rounded-2xl shadow-md flex flex-col gap-3">
+      <div className="bg-white p-6 rounded-2xl shadow-md flex flex-col gap-3 tenor-sans-regular">
         <h2 className="text-lg font-semibold text-black">Shipping Address</h2>
 
         <input
@@ -268,7 +268,7 @@ function Checkout() {
       </div>
 
       {/* Order Summary */}
-      <div className="bg-white p-6 rounded-2xl shadow-md flex flex-col gap-3">
+      <div className="bg-white p-6 rounded-2xl shadow-md flex flex-col gap-3 tenor-sans-regular">
         <h2 className="text-lg font-semibold text-black">Order Summary</h2>
         {cart.items.map((item) => (
           <div
@@ -290,7 +290,7 @@ function Checkout() {
       <button
         onClick={placeOrder}
         disabled={loading}
-        className="w-full bg-black text-white py-3 rounded-xl font-semibold text-lg hover:opacity-90 transition disabled:opacity-50"
+        className="w-full bg-black text-white py-3 rounded-xl font-semibold text-lg hover:opacity-90 transition disabled:opacity-50 tenor-sans-regular"
       >
         {loading ? "Placing Order..." : "Place Order"}
       </button>

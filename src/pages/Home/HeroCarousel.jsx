@@ -30,7 +30,7 @@ const HeroCarousel = ({ images }) => {
                   {hero.collection}
                 </h2>
               )}
-              <button className="bg-white/90 backdrop-blur-md text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 rounded-full shadow-lg hover:bg-white transition">
+              <button className="bg-white/90 backdrop-blur-md text-xs sm:text-sm md:text-base px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 rounded-full shadow-lg hover:bg-white transition italiana-regular">
                 Buy Now
               </button>
             </div>

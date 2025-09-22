@@ -29,14 +29,14 @@ function CollectionDetail() {
     <div className="max-w-6xl mx-auto px-4 py-10">
       <Link
         to="/collections"
-        className="text-[#d2b3db] font-medium hover:underline mb-6 inline-block"
+        className="text-[#d2b3db] font-medium hover:underline mb-6 inline-block tenor-sans-regular"
       >
         ← Back to Collections
       </Link>
 
-      <h1 className="text-3xl font-bold mb-8 text-center text-black">{collection.name}</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center text-black tenor-sans-regular">{collection.name}</h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 tenor-sans-regular">
         {products.length > 0 ? (
           products.map((product) => (
             <Link to={`/product/${product._id}`} key={product._id}>
@@ -52,7 +52,7 @@ function CollectionDetail() {
             </Link>
           ))
         ) : (
-          <p className="text-center col-span-full text-gray-500">
+          <p className="text-center col-span-full text-gray-500 tenor-sans-regular">
             No products found for this collection.
           </p>
         )}

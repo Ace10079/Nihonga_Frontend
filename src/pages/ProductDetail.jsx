@@ -41,7 +41,7 @@ function ProductDetail() {
     })();
   }, [id, user]);
 
-  if (!product) return <h2 className="text-center mt-10">Loading...</h2>;
+  if (!product) return <h2 className="text-center mt-10 tenor-sans-regular">Loading...</h2>;
 
   const stockStatus =
     product.stock === 0
@@ -99,7 +99,7 @@ function ProductDetail() {
   const isInWishlist = wishlist.includes(product._id);
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-10 relative">
+    <div className="max-w-6xl mx-auto px-6 py-10 relative tenor-sans-regular">
       <Link
         to={`/collections/${product.collection}`}
         className="text-[#d2b3db] font-medium hover:underline mb-6 inline-block"
@@ -139,7 +139,7 @@ function ProductDetail() {
         {/* Right: Info */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <h1 className="text-3xl font-bold text-black">{product.name}</h1>
+            <h1 className="text-3xl font-bold text-black italiana-regular">{product.name}</h1>
             <button
               onClick={toggleWishlist}
               disabled={isWishlistLoading}

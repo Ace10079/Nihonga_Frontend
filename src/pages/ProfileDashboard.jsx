@@ -7,8 +7,8 @@ const ProfileDashboard = ({ user, onLogout }) => {
   const [activeTab, setActiveTab] = useState("profile"); // profile | orders
 
   return (
-    <div className="flex flex-col gap-6 max-w-4xl mx-auto p-6 bg-white rounded-3xl shadow-lg">
-      <h2 className="text-2xl font-bold text-center text-black mb-4">My Account</h2>
+    <div className="flex flex-col gap-6 max-w-4xl mx-auto p-6 bg-white rounded-3xl shadow-lg tenor-sans-regular">
+      <h2 className="text-2xl font-bold text-center text-black mb-4 tenor-sans-regular">My Account</h2>
 
       {/* Navigation Tabs */}
       <div className="flex justify-center gap-4 border-b border-gray-200 mb-6">
@@ -45,7 +45,7 @@ const ProfileDashboard = ({ user, onLogout }) => {
         onClick={onLogout}
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
-        className="bg-[#d2b3db] text-white py-3 rounded-xl font-semibold shadow-md transition-all duration-300"
+        className="bg-[#d2b3db] text-white py-3 rounded-xl font-semibold shadow-md transition-all duration-300 tenor-sans-regular"
       >
         Logout
       </motion.button>

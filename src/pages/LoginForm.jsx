@@ -40,7 +40,7 @@ const LoginForm = ({ onLoginSuccess, onSwitchToSignup, setLoading }) => {
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.1, type: "spring", stiffness: 200 }}
-            className="text-2xl font-bold text-center text-[#d2b3db]"
+            className="text-2xl font-bold text-center text-[#d2b3db] tenor-sans-regular"
           >
             Welcome Back
           </motion.h2>
@@ -55,14 +55,14 @@ const LoginForm = ({ onLoginSuccess, onSwitchToSignup, setLoading }) => {
             whileTap={{ scale: 0.98 }}
             animate={shake ? { x: [0, -10, 10, -10, 0] } : {}}
             transition={shake ? { duration: 0.5 } : { type: "spring", stiffness: 400, damping: 17 }}
-            className="bg-[#d2b3db] text-[#e9f3ff] py-3 rounded-xl font-semibold shadow-md transition-all duration-300 mt-2"
+            className="bg-[#d2b3db] text-[#e9f3ff] py-3 rounded-xl font-semibold shadow-md transition-all duration-300 mt-2 tenor-sans-regular"
           >
             Login
           </motion.button>
 
           <p
             onClick={onSwitchToSignup}
-            className="text-center text-sm text-[#d2b3db] cursor-pointer hover:underline mt-2"
+            className="text-center text-sm text-[#d2b3db] cursor-pointer hover:underline mt-2 tenor-sans-regular"
           >
             New user? <span className="font-semibold">Sign up here</span>
           </p>

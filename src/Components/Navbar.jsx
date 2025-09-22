@@ -181,7 +181,7 @@ function Navbar() {
             />
           </span>
           <div className="absolute top-full left-0 mt-2 w-64 bg-white shadow-xl rounded-xl border border-gray-200 p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-hover:translate-y-1 transition-all duration-500 transform origin-top">
-            <h3 className="text-sm font-semibold text-gray-700 mb-2">
+            <h3 className="text-md font-bold text-black mb-2 italiana-regular">
               Collections
             </h3>
             <ul className="space-y-2 text-sm text-gray-600">

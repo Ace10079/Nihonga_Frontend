@@ -7,7 +7,7 @@ import "swiper/css";
 const CollectionsSlider = ({ collections }) => {
   return (
     <section className="max-w-6xl mx-auto text-left px-4">
-      <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center">
+      <h2 className="text-xl sm:text-5xl font-bold mb-6 text-center italiana-regular">
         Our Collections
       </h2>
 
@@ -26,7 +26,7 @@ const CollectionsSlider = ({ collections }) => {
       >
         {collections.map((item, idx) => (
           <SwiperSlide key={idx}>
-            <div className="relative w-full h-56 sm:h-72 rounded-xl overflow-hidden shadow-md flex-shrink-0 cursor-pointer group transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+            <div className="relative w-full h-56 sm:h-72 rounded-xl overflow-hidden shadow-md flex-shrink-0 cursor-pointer group transition-transform duration-300 hover:scale-105 hover:shadow-xl tenor-sans-regular">
               <img
                 src={item.image}
                 alt={item.name}

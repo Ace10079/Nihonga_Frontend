@@ -23,13 +23,13 @@ const OrderDetail = () => {
   }, [id]);
 
   if (loading)
-    return <div className="text-center py-6 text-gray-600">Loading order...</div>;
+    return <div className="text-center py-6 text-gray-600 tenor-sans-regular">Loading order...</div>;
 
   if (!order)
-    return <div className="text-center py-6 text-gray-600">Order not found.</div>;
+    return <div className="text-center py-6 text-gray-600 tenor-sans-regular">Order not found.</div>;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-4xl mx-auto px-4 py-8 tenor-sans-regular">
       {/* Back button */}
       <button
         onClick={() => navigate(-1)}
@@ -75,8 +75,8 @@ const OrderDetail = () => {
 
         {/* Items */}
         <div>
-          <h3 className="font-semibold text-gray-800 mb-3">Items</h3>
-          <div className="divide-y divide-gray-200 border rounded-lg overflow-hidden">
+          <h3 className="font-semibold text-gray-800 mb-3 tenor-sans-regular">Items</h3>
+          <div className="divide-y divide-gray-200 border rounded-lg overflow-hidden tenor-sans-regular">
             {order.items.map((item) => (
               <div
                 key={item._id}
@@ -98,8 +98,8 @@ const OrderDetail = () => {
 
         {/* Shipping Address */}
         <div>
-          <h3 className="font-semibold text-gray-800 mb-3">Shipping Address</h3>
-          <div className="text-sm text-gray-700 space-y-1 bg-gray-50 rounded-lg p-4">
+          <h3 className="font-semibold text-gray-800 mb-3 tenor-sans-regular">Shipping Address</h3>
+          <div className="text-sm text-gray-700 space-y-1 bg-gray-50 rounded-lg p-4 tenor-sans-regular">
             <p className="font-medium">{order.address.fullName}</p>
             <p>
               {order.address.street}, {order.address.city}

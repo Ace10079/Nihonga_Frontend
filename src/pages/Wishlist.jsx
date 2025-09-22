@@ -30,7 +30,7 @@ function Wishlist() {
   };
 
   if (!user) return (
-    <div className="max-w-4xl mx-auto p-8 text-center">
+    <div className="max-w-4xl mx-auto p-8 text-center tenor-sans-regular">
       <h1 className="text-3xl font-bold mb-4">❤️ Wishlist</h1>
       <p className="text-gray-600">
         Please <Link to="/account" className="text-[#d2b3db] underline">log in</Link> to view your wishlist.
@@ -39,7 +39,7 @@ function Wishlist() {
   );
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="max-w-5xl mx-auto p-6 tenor-sans-regular">
       <h1 className="text-3xl font-bold mb-6 text-black">❤️ Wishlist</h1>
 
       {wishlist.length === 0 ? (

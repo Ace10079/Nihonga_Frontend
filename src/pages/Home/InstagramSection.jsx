@@ -36,13 +36,13 @@ const InstagramSection = () => {
           className="text-center md:text-left"
         >
           <h2
-            className="text-3xl md:text-4xl font-bold mb-4 tracking-wide"
+            className="text-3xl md:text-4xl font-bold mb-4 tracking-wide italiana-regular"
             style={{ color: "#e9f3ff" }}
           >
             Join the Nihonga Journey
           </h2>
           <p
-            className="text-base md:text-lg mb-6 leading-relaxed"
+            className="text-base md:text-lg mb-6 leading-relaxed tenor-sans-regular"
             style={{ color: "#000000" }}
           >
             Step into our world of contemporary Nihonga art.  
@@ -56,7 +56,7 @@ const InstagramSection = () => {
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="inline-block px-6 py-3 rounded-full font-semibold shadow-md text-sm md:text-base"
+            className="inline-block px-6 py-3 rounded-full font-semibold shadow-md text-sm md:text-base tenor-sans-regular"
             style={{
               backgroundColor: "#e9f3ff",
               color: "#d2b3db",

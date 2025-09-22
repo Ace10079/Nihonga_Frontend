@@ -5,18 +5,18 @@ const Input = ({ label, type = "text", value, onChange, required = false }) => {
   const isActive = value && value.length > 0;
 
   return (
-    <div className="relative w-full mb-4">
+    <div className="relative w-full mb-4 tenor-sans-regular">
       <input
         type={type}
         value={value}
         onChange={onChange}
         placeholder=" "
         required={required}
-        className="w-full px-4 pt-5 pb-2 border-2 border-[#e9f3ff]/30 rounded-xl focus:outline-none focus:border-[#d2b3db] bg-white text-[#000] placeholder-transparent transition-all duration-300"
+        className="w-full px-4 pt-5 pb-2 border-2 border-[#e9f3ff]/30 rounded-xl focus:outline-none focus:border-[#d2b3db] bg-white text-[#000] placeholder-transparent transition-all duration-300 tenor-sans-regular"
       />
 
       <motion.label
-        className="absolute left-4 text-[#d2b3db] pointer-events-none bg-white px-1 transition-all duration-300"
+        className="absolute left-4 text-[#d2b3db] pointer-events-none bg-white px-1 transition-all duration-300 tenor-sans-regular"
         animate={{
           y: isActive ? -10 : 12,
           scale: isActive ? 0.85 : 1,
